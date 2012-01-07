@@ -154,16 +154,15 @@
 
 //////// openGL es 2.0 ///////////////////////////
   glColor4f(c2.r, c2.g, c2.b, c2.a);
-  glEnableVertexAttribArray(m_a_positionHandle);
-	glUseProgram(m_shaderProgram);
-  //	glEnableVertexAttribArray(m_a_colorHandle);
-	glVertexAttribPointer(m_a_positionHandle, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-  //	glVertexAttribPointer(m_a_colorHandle, 4, GL_FLOAT, GL_FALSE, 0, squareColors);
-  //	glUniformMatrix4fv(m_u_mvpHandle, 1, GL_FALSE, (GLfloat*)&mvp.m[0] );  
+  ccGLUseProgram( self.shaderProgram->program_ );
+  ccGLUniformModelViewProjectionMatrix( self.shaderProgram);
+  ccGLEnableVertexAttribs(kCCVertexAttrib_Color | kCCVertexAttribFlag_Position );
+  glUniform4f( kCCVertexAttrib_Color, c2.r, c2.g, c2.b, c2.a );
+  glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, vertices);  
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertices),vertices);
   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)nVertices);
-
 //////////////////////////////////////////////////  
-  
+  CHECK_GL_ERROR();
   glEnableClientState(GL_COLOR_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glEnable(GL_TEXTURE_2D);
@@ -296,6 +295,20 @@
 		//[self addChild: label];
 #if defined (__COCOS2D_GLES2__)
     [self compileShaders];
+    self.shaderProgram = 
+    [[[GLProgram alloc] 
+      initWithVertexShaderFilename:@"PositionTextureColor.vsh"
+      fragmentShaderFilename:@"PositionTextureColor.fsh"] autorelease];
+    CHECK_GL_ERROR_DEBUG();
+    [self.shaderProgram addAttribute:kCCAttributeNamePosition index:kCCVertexAttrib_Position];
+		[self.shaderProgram addAttribute:kCCAttributeNameColor index:kCCVertexAttrib_Color];
+		CHECK_GL_ERROR_DEBUG();
+		[shaderProgram_ link];    
+		CHECK_GL_ERROR_DEBUG();
+		[shaderProgram_ updateUniforms];    
+		CHECK_GL_ERROR_DEBUG();                
+//    m_a_positionHandle = glGetUniformLocation( self.shaderProgram->program_, "u_texture");
+    CHECK_GL_ERROR_DEBUG();
 #endif
     [self genBackground];
 	}
