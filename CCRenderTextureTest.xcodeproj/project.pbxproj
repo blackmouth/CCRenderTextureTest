@@ -154,6 +154,8 @@
 		6D962D4514B7A543001783F4 /* ZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D962CF814B7A543001783F4 /* ZipUtils.m */; };
 		6D962E7914B7A8C1001783F4 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D962E7714B7A8C1001783F4 /* SimpleVertex.glsl */; };
 		6D962E7A14B7A8C1001783F4 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D962E7814B7A8C1001783F4 /* SimpleFragment.glsl */; };
+		6D96314514B83DE2001783F4 /* FragmentShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6D96314314B83DE2001783F4 /* FragmentShader.fsh */; };
+		6D96314614B83DE2001783F4 /* VertexShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6D96314414B83DE2001783F4 /* VertexShader.vsh */; };
 		6DCEBF1614B67B770023070F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DCEBF1514B67B770023070F /* QuartzCore.framework */; };
 		6DCEBF1814B67B770023070F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DCEBF1714B67B770023070F /* OpenGLES.framework */; };
 		6DCEBF1A14B67B770023070F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DCEBF1914B67B770023070F /* OpenAL.framework */; };
@@ -423,6 +425,8 @@
 		6D962E5A14B7A7A3001783F4 /* Twist.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Twist.vsh; sourceTree = "<group>"; };
 		6D962E7714B7A8C1001783F4 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleVertex.glsl; sourceTree = "<group>"; };
 		6D962E7814B7A8C1001783F4 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleFragment.glsl; sourceTree = "<group>"; };
+		6D96314314B83DE2001783F4 /* FragmentShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FragmentShader.fsh; sourceTree = "<group>"; };
+		6D96314414B83DE2001783F4 /* VertexShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = VertexShader.vsh; sourceTree = "<group>"; };
 		6DCEBF1114B67B770023070F /* CCRenderTextureTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCRenderTextureTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCEBF1514B67B770023070F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6DCEBF1714B67B770023070F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -893,6 +897,8 @@
 				6DCEBF5D14B67B780023070F /* PositionColor.vsh */,
 				6DCEBF5F14B67B780023070F /* PositionTexture.fsh */,
 				6DCEBF6114B67B780023070F /* PositionTexture.vsh */,
+				6D96314314B83DE2001783F4 /* FragmentShader.fsh */,
+				6D96314414B83DE2001783F4 /* VertexShader.vsh */,
 				6DCEBF6314B67B780023070F /* PositionTexture_uColor.fsh */,
 				6DCEBF6514B67B780023070F /* PositionTexture_uColor.vsh */,
 				6DCEBF6714B67B780023070F /* PositionTextureA8Color.fsh */,
@@ -1128,6 +1134,8 @@
 				6D96295414B7A133001783F4 /* Noise.png in Resources */,
 				6D962E7914B7A8C1001783F4 /* SimpleVertex.glsl in Resources */,
 				6D962E7A14B7A8C1001783F4 /* SimpleFragment.glsl in Resources */,
+				6D96314514B83DE2001783F4 /* FragmentShader.fsh in Resources */,
+				6D96314614B83DE2001783F4 /* VertexShader.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

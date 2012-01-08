@@ -13,6 +13,10 @@
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
 
+CGPoint CGPointIntegral(CGPoint pt) {
+  return CGPointMake(round(pt.x), round(pt.y));
+}
+
 +(CCScene *) scene
 {
 	// 'scene' is an autorelease object.
@@ -122,12 +126,9 @@
   [rt beginWithClear:c1.r g:c1.g b:c1.b a:c1.a];
   
   // 3: Draw into the texture      
-  // Layer 1: Stripes
-  glDisable(GL_TEXTURE_2D);
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  glDisableClientState(GL_COLOR_ARRAY);
-    
+  // Layer 1: Stripes    
   CGPoint vertices[nStripes*6];
+
   int nVertices = 0;
   float x1 = -textureSize;
   float x2;
@@ -136,33 +137,57 @@
   float dx = textureSize / nStripes * 2;
   float stripeWidth = dx/2;
   
+  const GLfloat squareColors[] = {
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1,
+    c2.r, c2.g, c2.b, 1
+  };
+
   for (int i=0; i<nStripes; i++) {
     x2 = x1 + textureSize;    
-    vertices[nVertices++] = CGPointMake(x1, y1);
-    vertices[nVertices++] = CGPointMake(x1+stripeWidth, y1);
-    vertices[nVertices++] = CGPointMake(x2, y2);
+    vertices[nVertices++] = CGPointIntegral(CGPointMake(x1, y1));
+    vertices[nVertices++] = CGPointIntegral(CGPointMake(x1+stripeWidth, y1));
+    vertices[nVertices++] = CGPointIntegral(CGPointMake(x2, y2));
     vertices[nVertices++] = vertices[nVertices-3];
     vertices[nVertices++] = vertices[nVertices-3];
-    vertices[nVertices++] = CGPointMake(x2+stripeWidth, y2);
+    vertices[nVertices++] = CGPointIntegral(CGPointMake(x2+stripeWidth, y2));
     x1 += dx;
     
   }
-//  What works in openGL es 1.1
-//  glColor4f(c2.r, c2.g, c2.b, c2.a);
-//  glVertexPointer(2, GL_FLOAT, 0, vertices);
-//  glDrawArrays(GL_TRIANGLES, 0, (GLsizei)nVertices);
-
-//////// openGL es 2.0 ///////////////////////////
-  glColor4f(c2.r, c2.g, c2.b, c2.a);
+    
+  glDisable(GL_TEXTURE_2D);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisableClientState(GL_COLOR_ARRAY);
   ccGLUseProgram( self.shaderProgram->program_ );
   ccGLUniformModelViewProjectionMatrix( self.shaderProgram);
-  ccGLEnableVertexAttribs(kCCVertexAttrib_Color | kCCVertexAttribFlag_Position );
-  glUniform4f( kCCVertexAttrib_Color, c2.r, c2.g, c2.b, c2.a );
   glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, vertices);  
-	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertices),vertices);
+  glEnableVertexAttribArray(kCCVertexAttrib_Position);
+  glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_FALSE, 0, squareColors);  
+  glEnableVertexAttribArray(kCCVertexAttrib_Color);
   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)nVertices);
+  
 //////////////////////////////////////////////////  
-  CHECK_GL_ERROR();
   glEnableClientState(GL_COLOR_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glEnable(GL_TEXTURE_2D);
@@ -175,7 +200,7 @@
   
   // 4: Call CCRenderTexture:end
   [rt end];
-  
+    
   // 5: Create a new Sprite from the texture
   return [CCSprite spriteWithTexture:rt.sprite.texture];
 }
@@ -269,7 +294,7 @@
   offset += PIXELS_PER_SECOND * dt;
   
   if(offset > 1024) offset = 0;
-  
+    
   CGSize textureSize = _background.textureRect.size;
   [_background setTextureRect:CGRectMake(0, offset, textureSize.width, textureSize.height)];
   
@@ -297,8 +322,8 @@
     [self compileShaders];
     self.shaderProgram = 
     [[[GLProgram alloc] 
-      initWithVertexShaderFilename:@"PositionTextureColor.vsh"
-      fragmentShaderFilename:@"PositionTextureColor.fsh"] autorelease];
+      initWithVertexShaderFilename:@"VertexShader.vsh"
+      fragmentShaderFilename:@"FragmentShader.fsh"] autorelease];
     CHECK_GL_ERROR_DEBUG();
     [self.shaderProgram addAttribute:kCCAttributeNamePosition index:kCCVertexAttrib_Position];
 		[self.shaderProgram addAttribute:kCCAttributeNameColor index:kCCVertexAttrib_Color];
@@ -311,8 +336,14 @@
     CHECK_GL_ERROR_DEBUG();
 #endif
     [self genBackground];
+    
+    self.isTouchEnabled = TRUE;
 	}
 	return self;
+}
+
+-(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+  [self genBackground];
 }
 
 // on "dealloc" you need to release all your retained objects
