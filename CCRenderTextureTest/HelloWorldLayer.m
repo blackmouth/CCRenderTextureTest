@@ -136,34 +136,7 @@ CGPoint CGPointIntegral(CGPoint pt) {
   float y2 = 0;
   float dx = textureSize / nStripes * 2;
   float stripeWidth = dx/2;
-  
-  const GLfloat squareColors[] = {
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1,
-    c2.r, c2.g, c2.b, 1
-  };
-
+      
   for (int i=0; i<nStripes; i++) {
     x2 = x1 + textureSize;    
     vertices[nVertices++] = CGPointIntegral(CGPointMake(x1, y1));
@@ -175,7 +148,17 @@ CGPoint CGPointIntegral(CGPoint pt) {
     x1 += dx;
     
   }
-    
+  
+  GLfloat* squareColors = malloc((nVertices * 4) * sizeof(GLfloat));
+
+  int index = -1;
+  for(int i=0; i<nVertices; i++) {    
+    squareColors[index++] = c2.r;
+    squareColors[index++] = c2.g;
+    squareColors[index++] = c2.b;
+    squareColors[index++] = 1.0;
+  }
+
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
@@ -186,8 +169,6 @@ CGPoint CGPointIntegral(CGPoint pt) {
   glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_FALSE, 0, squareColors);  
   glEnableVertexAttribArray(kCCVertexAttrib_Color);
   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)nVertices);
-  
-//////////////////////////////////////////////////  
   glEnableClientState(GL_COLOR_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glEnable(GL_TEXTURE_2D);
@@ -201,6 +182,8 @@ CGPoint CGPointIntegral(CGPoint pt) {
   // 4: Call CCRenderTexture:end
   [rt end];
     
+  free(squareColors);
+  
   // 5: Create a new Sprite from the texture
   return [CCSprite spriteWithTexture:rt.sprite.texture];
 }
@@ -273,7 +256,7 @@ CGPoint CGPointIntegral(CGPoint pt) {
   ccColor4F color2  = [self randomBrightColor];
   //_background = [self spriteWithColor:bgColor textureSize:512];
   //int nStripes = ((arc4random() % 4) + 1) * 2;
-  _background = [self stripedSpriteWithColor1:bgColor color2:color2 textureSize:512 stripes:4];
+  _background = [self stripedSpriteWithColor1:bgColor color2:color2 textureSize:512 stripes:22];
   
   CGSize winSize = [CCDirector sharedDirector].winSize;
   _background.position = ccp(winSize.width/2, winSize.height/2);        
